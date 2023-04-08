@@ -1,6 +1,16 @@
+
+using Microsoft.EntityFrameworkCore;
+using TestCorp.Domain.Data;
+using TestCorp.Domain.Models;
+using TestCorp.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
+builder.Services.AddTransient<IBaseRepository<Company>, CompanyRepository>();
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Test4CreateDbContext>(opt =>
+        opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
