@@ -5,6 +5,7 @@ using TestCorp.Domain.Models;
 using TestCorp.Repository;
 using TestCorp.Services;
 using TestCorp.Services.Interfaces;
+using TestCorp.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Test4CreateDbContext>(opt =>
         opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddSingleton(MappingConfig.RegisterMaps().CreateMapper());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
