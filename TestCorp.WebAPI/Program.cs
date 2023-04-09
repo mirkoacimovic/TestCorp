@@ -3,12 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using TestCorp.Domain.Data;
 using TestCorp.Domain.Models;
 using TestCorp.Repository;
+using TestCorp.Services;
+using TestCorp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
 builder.Services.AddTransient<IBaseRepository<Company>, CompanyRepository>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Test4CreateDbContext>(opt =>
         opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 

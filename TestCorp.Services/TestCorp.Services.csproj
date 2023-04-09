@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TestCorp.Models\TestCorp.Domain.csproj" />
+    <ProjectReference Include="..\TestCorp.Repository\TestCorp.Repository.csproj" />
   </ItemGroup>
 
 </Project>

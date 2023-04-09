@@ -9,10 +9,10 @@ namespace TestCorp.Services.Interfaces
 {
     public interface ICompanyService
     {
-        Task<Company> GetAllCompanies();
+        Task<IEnumerable<Company>> GetAllCompanies();
         Task<Company> GetCompanyById(int id);
-        Task<Company?> CreateCompany();
-        Task<Company?> UpdateCompany();
-        Task<Company?> DeleteCompany();
+        Task<Company?> CreateCompany(Company company, IEnumerable<Employee> employees);
+        Task<Company?> UpdateCompany(Company company);
+        Task<Company?> DeleteCompany(int id);
     }
 }

@@ -18,6 +18,7 @@
     <ProjectReference Include="..\TestCorp.Core\TestCorp.Core.csproj" />
     <ProjectReference Include="..\TestCorp.Models\TestCorp.Domain.csproj" />
     <ProjectReference Include="..\TestCorp.Repository\TestCorp.Repository.csproj" />
+    <ProjectReference Include="..\TestCorp.Services\TestCorp.Services.csproj" />
   </ItemGroup>
 
 </Project>
