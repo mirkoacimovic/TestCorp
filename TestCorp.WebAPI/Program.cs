@@ -9,8 +9,7 @@ using TestCorp.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+// Add services to the container
 builder.Services.AddTransient(typeof(EmployeeRepository));
 builder.Services.AddTransient(typeof(CompanyRepository));
 builder.Services.AddTransient<ICompanyService, CompanyService>();

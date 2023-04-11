@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using TestCorp.Domain.Data;
+﻿using TestCorp.Domain.Data;
 using TestCorp.Domain.Models;
 using TestCorp.Repository;
 using TestCorp.Services.Interfaces;
@@ -31,38 +24,34 @@ namespace TestCorp.Services
         {
             if (db.Employees.Where(e => e.Email == employee.Email).FirstOrDefault() != null) return null; // employee already exists
 
-            var companyEmployees = (from empl in db.Employees
-                                    join emplCmp in db.CompanyEmployees
-                                    on empl.Id equals emplCmp.EmployeeId
-                                    select new CompanyEmployee
-                                    {
-                                        CompanyId = emplCmp.CompanyId,
-                                        EmployeeId = emplCmp.EmployeeId,
-                                        Employee = emplCmp.Employee
-                                    }).Select(e => e).ToList();
-
-            // creates new employee
-            var newEmployee = await employeeRepository.CreateAsync(employee);
-
-            if (newEmployee == null) return employee;
-
-            foreach (var companyId in companyIds)
+            try
             {
-                // check if employee already exists for company
-                var companyEmployee = companyEmployees.Where(ce => ce.EmployeeId == employee.Id && ce.CompanyId == companyId).FirstOrDefault();
+                Employee? newEmployee = null; 
 
-                if (companyEmployee != null || companyEmployees.Where(cx => cx.Employee?.Title == employee.Title).FirstOrDefault() == null) continue;
-
-                // associate employee and company
-                var comp = await companyRepository.GetByIdAsync(companyId);
-                if (comp != null)
+                foreach (var companyId in companyIds) 
                 {
-                    await db.CompanyEmployees.AddAsync(new CompanyEmployee { EmployeeId = newEmployee.Id, Employee = newEmployee, CompanyId = companyId, Company = comp });
+                    var employeeCompany = from emp in db.Employees
+                                          join empCmp in db.CompanyEmployees
+                                          on emp.Id equals empCmp.EmployeeId
+                                          where empCmp.CompanyId == companyId && employee.Id == emp.Id && emp.Title == employee.Title
+                                          select emp;
+                    
+                    if (employeeCompany.Count() > 0) continue;
+
+                    // creates new employee
+                    newEmployee = await employeeRepository.CreateAsync(employee);
+                    await db.CompanyEmployees.AddAsync(new CompanyEmployee { EmployeeId = employee.Id, CompanyId= companyId });
                     await db.SaveChangesAsync();
                 }
+
+                return newEmployee;
+            }
+            catch(Exception ex)
+            {
+                // logovanje
+                return null;
             }
             
-            return null;
         }
 
         public Task<Employee?> DeleteEmployee(int employeeId)
