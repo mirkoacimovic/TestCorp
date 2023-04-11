@@ -15,6 +15,7 @@ builder.Services.AddTransient(typeof(CompanyRepository));
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IValidationService, ValidationService>();
+builder.Services.AddTransient<ILog, Logger>();
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Test4CreateDbContext>(opt =>
         opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 

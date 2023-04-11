@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestCorp.Domain.Data;
@@ -11,9 +12,11 @@ using TestCorp.Domain.Data;
 namespace TestCorp.Domain.Migrations
 {
     [DbContext(typeof(Test4CreateDbContext))]
-    partial class Test4CreateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230411155757_Compnamefix")]
+    partial class Compnamefix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

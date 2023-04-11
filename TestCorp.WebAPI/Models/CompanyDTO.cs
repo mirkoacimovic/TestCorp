@@ -5,6 +5,6 @@ namespace TestCorp.WebAPI.Models
     public class CompanyDTO
     {
         public string? Name { get; set; }
-        public Employee[]? Employees { get;}
+        public IEnumerable<object>? Employees { get; set; }
     }
 }

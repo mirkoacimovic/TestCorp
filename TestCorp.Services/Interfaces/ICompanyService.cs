@@ -11,7 +11,7 @@ namespace TestCorp.Services.Interfaces
     {
         Task<IEnumerable<Company>> GetAllCompanies();
         Task<Company> GetCompanyById(int id);
-        Task<Company?> CreateCompany(Company company, IEnumerable<Employee> employees);
+        Task<Company?> CreateCompany(Company company, IEnumerable<string> employees);
         Task<Company?> UpdateCompany(Company company);
         Task<Company?> DeleteCompany(int id);
     }

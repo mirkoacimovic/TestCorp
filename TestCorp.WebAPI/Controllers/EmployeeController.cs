@@ -27,10 +27,8 @@ namespace TestCorp.WebAPI.Controllers
         [Route("employees")]
         public async Task<ApiResponseBase> CreateEmployee([FromBody] EmployeeDTO newEmployee)
         {
-            
             try
             {
-               
                 var employee = Mapper.Map<Employee>(newEmployee);
 
                 if (employee.Email != null && Core.Validation.Validator.IsValidEmail(employee.Email) == false) throw new Exception("You have provided invalid email.");

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json;
 using TestCorp.Core.Api;
 using TestCorp.Domain.Models;
 using TestCorp.Services.Interfaces;
@@ -11,29 +13,31 @@ namespace TestCorp.WebAPI.Controllers
     [Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
-        private readonly Mapper mapper;
+        private IMapper Mapper { get; }
         private readonly ICompanyService companyService;
 
-        public CompanyController(Mapper map, ICompanyService compsrv)
+        public CompanyController(IMapper map, ICompanyService compsrv)
         {
             companyService = compsrv;
-            mapper = map;
+            Mapper = map;
         }
 
         [HttpPost]
-        [Route("employees")]
+        [Route("companies")]
         public async Task<ApiResponseBase> CreateCompany([FromBody] CompanyDTO newCompany)
         {
             try
             {
-                var company = mapper.Map<Company>(newCompany);
-
+                var company = Mapper.Map<Company>(newCompany);
+                company.CreatedAt = DateTime.Now.ToUniversalTime();
+                var employees = Mapper.Map<IEnumerable<string>>(newCompany.Employees);
+                await companyService.CreateCompany(company, employees);
 
                 return await Task.FromResult(new ApiResponseBase
                 {
                     Status = 200,
                     ErrorMessage = "Company has been created.",
-                    Data = newCompany
+                    Data = company
                 });
             }
             catch(Exception ex)

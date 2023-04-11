@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using TestCorp.Domain.Data;
@@ -36,13 +37,20 @@ namespace TestCorp.Repository
 
         public async Task<Company?> CreateAsync(Company item)
         {
-            if (item != null)
+            try
             {
-                await db.Companies.AddAsync(item);
-                await db.SaveChangesAsync();
-                return item;
+                if (item != null)
+                {
+                    await db.Companies.AddAsync(item);
+                    await db.SaveChangesAsync();
+                    return item;
+                }
+                return null;
             }
-            return null;
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<Company?> DeleteAsync(int id)

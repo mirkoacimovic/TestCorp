@@ -9,15 +9,17 @@ namespace TestCorp.Services
     {
         private readonly Test4CreateDbContext db;
         private readonly EmployeeRepository employeeRepository;
+        private readonly ILog loggerService;
         private readonly CompanyRepository companyRepository;
         private readonly IValidationService validationService;
 
-        public EmployeeService(Test4CreateDbContext context, EmployeeRepository emplRepository, CompanyRepository cmpRepository, IValidationService validation) 
+        public EmployeeService(Test4CreateDbContext context, ILog logger, EmployeeRepository emplRepository, CompanyRepository cmpRepository, IValidationService validation) 
         {
             employeeRepository= emplRepository;
             companyRepository = cmpRepository;
             validationService = validation;
             db = context;
+            loggerService = logger;
         }
 
         public async Task<Employee?> CreateEmployee(Employee employee, IEnumerable<int> companyIds)
@@ -39,16 +41,31 @@ namespace TestCorp.Services
                     if (employeeCompany.Count() > 0) continue;
 
                     // creates new employee
+                    employee.Id = db.Employees.Count() + 1;
                     newEmployee = await employeeRepository.CreateAsync(employee);
                     await db.CompanyEmployees.AddAsync(new CompanyEmployee { EmployeeId = employee.Id, CompanyId= companyId });
                     await db.SaveChangesAsync();
+                    await loggerService.Log(new SystemLog
+                    {
+                        ResourceType = Domain.Models.Enums.ResourceType.Employee,
+                        Event = Domain.Models.Enums.EventType.CREATE,
+                        Comment = $"New employee {newEmployee.Email} was created.",
+                        CreatedAt = DateTime.Now.ToUniversalTime(),
+                        Changeset = $"{newEmployee.Id}, {newEmployee.Email}, {newEmployee.Title}, {newEmployee.CreatedAt}"
+                    });
                 }
 
                 return newEmployee;
             }
             catch(Exception ex)
             {
-                // logovanje
+                await loggerService.Log(new SystemLog
+                {
+                    ResourceType = Domain.Models.Enums.ResourceType.Employee,
+                    Event = Domain.Models.Enums.EventType.CREATE,
+                    Comment = $"Error while creating employee. {ex.Message}",
+                    CreatedAt = DateTime.Now.ToUniversalTime(),
+                });
                 return null;
             }
             
