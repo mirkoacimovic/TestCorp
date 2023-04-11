@@ -10,7 +10,7 @@ using TestCorp.Domain.Models;
 
 namespace TestCorp.Repository
 {
-    public class EmployeeRepository : IBaseRepository<Employee>
+    public class EmployeeRepository
     {
         private readonly Test4CreateDbContext db;
 

@@ -10,10 +10,12 @@ using TestCorp.WebAPI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
-builder.Services.AddTransient<IBaseRepository<Company>, CompanyRepository>();
+//builder.Services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddTransient(typeof(EmployeeRepository));
+builder.Services.AddTransient(typeof(CompanyRepository));
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+builder.Services.AddTransient<IValidationService, ValidationService>();
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Test4CreateDbContext>(opt =>
         opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 

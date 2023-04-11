@@ -12,7 +12,8 @@ namespace TestCorp.WebAPI
             {
                 c.CreateMap<Employee, EmployeeDTO>()
                  .ReverseMap();
-
+                c.CreateMap<Company, CompanyDTO>()
+                 .ReverseMap();
             });
             return configuration;
         }

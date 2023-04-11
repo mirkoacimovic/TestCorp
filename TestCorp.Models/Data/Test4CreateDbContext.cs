@@ -25,7 +25,13 @@ namespace TestCorp.Domain.Data
         {
            builder.UseSerialColumns();
            builder.Entity<CompanyEmployee>().HasKey(ce => new { ce.EmployeeId, ce.CompanyId });
-           base.OnModelCreating(builder);
+           builder.Entity<Employee>()
+                   .Property(p => p.Id)
+           .ValueGeneratedOnAdd();
+            builder.Entity<Company>()
+                    .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+            base.OnModelCreating(builder);
         }
 
     }

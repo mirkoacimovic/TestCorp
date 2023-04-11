@@ -7,7 +7,9 @@ namespace TestCorp.Domain.Models
     public class Company : BaseEntity
     {
         [Key, Required]
-        public new int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Required]
         public string? Name { get; set; }
 
         public ICollection<CompanyEmployee>? CompanyEmployees { get; set; }

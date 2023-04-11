@@ -13,7 +13,8 @@ namespace TestCorp.Domain.Models
     public class SystemLog : BaseEntity
     {
         [Key, Required]
-        public new int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public ResourceType ResourceType { get; set; }
         public string? Changeset { get; set; }
         public EventType Event { get; set; }

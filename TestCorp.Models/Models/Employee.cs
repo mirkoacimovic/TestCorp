@@ -8,7 +8,8 @@ namespace TestCorp.Domain.Models
     public class Employee : BaseEntity
     {
         [Key, Required]
-        public new int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public EmployeeType Title { get; set; }
         public string? Email { get; set; }
 
